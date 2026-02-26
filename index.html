@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>課表紀錄相簿 - 衡點健康</title>
+    <style>
+        :root {
+            --green: #7ac19a;
+            --green-dark: #5a9a7a;
+            --green-light: #e8f5ee;
+            --pink: #f5b5b5;
+            --pink-dark: #d88888;
+            --pink-light: #fdf0f0;
+            --gray: #666;
+            --gray-light: #e0e0e0;
+            --gray-bg: #f8f9fa;
+            --white: #fff;
+            --shadow: 0 2px 12px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, var(--green-light) 0%, var(--pink-light) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .header-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--green-dark);
+            margin-bottom: 10px;
+        }
+        
+        .header-title {
+            font-size: 18px;
+            color: var(--gray);
+        }
+        
+        .member-info {
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--gray-bg);
+            border-radius: 8px;
+        }
+        
+        .member-info .name {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--green-dark);
+        }
+        
+        .member-info .date {
+            font-size: 14px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .member-info .coach {
+            font-size: 14px;
+            color: var(--gray);
+            margin-top: 3px;
+        }
+        
+        .class-type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        
+        .class-type-badge.strength_training {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .class-type-badge.pilates {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .class-type-badge.stretching {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        /* Loading & Empty */
+        .loading, .empty, .error {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+        
+        .loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--gray-light);
+            border-top-color: var(--green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .empty span, .error span {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .error {
+            color: var(--pink-dark);
+        }
+        
+        /* Album Section */
+        .album-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--green-dark);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .photo-count {
+            font-size: 13px;
+            font-weight: normal;
+            color: var(--gray);
+        }
+        
+        /* Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        
+        .photo-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid var(--gray-light);
+            transition: all 0.2s ease;
+        }
+        
+        .photo-item:hover {
+            border-color: var(--green);
+            transform: scale(1.02);
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-image {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-nav.prev {
+            left: 20px;
+        }
+        
+        .lightbox-nav.next {
+            right: 20px;
+        }
+        
+        .lightbox-counter {
+            position: absolute;
+            bottom: 30px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .lightbox-download {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        
+        .lightbox-download:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* 下載全部按鈕 */
+        .download-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            background: var(--green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s ease;
+        }
+        
+        .download-all-btn:hover {
+            background: var(--green-dark);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            color: var(--gray);
+            font-size: 13px;
+        }
+        
+        .footer a {
+            color: var(--green-dark);
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .photo-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .lightbox-nav.prev {
+                left: 10px;
+            }
+            
+            .lightbox-nav.next {
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-logo">📷 衡點健康</div>
+            <div class="header-title">課表紀錄相簿</div>
+            <div class="member-info" id="memberInfo" style="display: none;">
+                <div class="name" id="memberName"></div>
+                <div class="date" id="classDate"></div>
+                <div class="coach" id="coachName"></div>
+                <div class="class-type-badge" id="classType"></div>
+            </div>
+        </div>
+        
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>載入中...</p>
+        </div>
+        
+        <!-- Error -->
+        <div class="error" id="error" style="display: none;">
+            <span>❌</span>
+            <p>無法載入相簿資料</p>
+        </div>
+        
+        <!-- Empty -->
+        <div class="empty" id="empty" style="display: none;">
+            <span>📭</span>
+            <p>此課表沒有照片</p>
+        </div>
+        
+        <!-- Album -->
+        <div class="album-section" id="albumSection" style="display: none;">
+            <div class="section-title">
+                📸 課表紀錄
+                <span class="photo-count" id="photoCount"></span>
+            </div>
+            <div class="photo-grid" id="photoGrid"></div>
+            <button class="download-all-btn" id="downloadAllBtn" onclick="downloadAllPhotos()">
+                ⬇ 下載全部照片
+            </button>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <a href="javascript:history.back()">← 返回</a>
+        </div>
+    </div>
+    
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <a class="lightbox-download" id="lightboxDownload" href="" download title="下載照片">⬇</a>
+        <button class="lightbox-nav prev" onclick="prevImage()">‹</button>
+        <img class="lightbox-image" id="lightboxImage" src="" alt="">
+        <button class="lightbox-nav next" onclick="nextImage()">›</button>
+        <div class="lightbox-counter" id="lightboxCounter"></div>
+    </div>
+    
+    <script>
+        // 設定
+        const CONFIG = {
+            // 【請填入】Make.com Webhook URL
+            WEBHOOK_URL: 'https://hook.us2.make.com/YOUR_WEBHOOK_ID'
+        };
+        
+        // 全域變數
+        let photos = [];
+        let currentIndex = 0;
+        
+        // 課種名稱對應
+        const classTypeNames = {
+            'strength_training': { name: '💪 重訓', class: 'strength_training' },
+            'pilates': { name: '🧘 皮拉提斯', class: 'pilates' },
+            'stretching': { name: '🤸 伸展', class: 'stretching' }
+        };
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('id');
+            
+            if (!sessionId) {
+                showError();
+                return;
+            }
+            
+            loadAlbum(sessionId);
+        });
+        
+        // 載入相簿資料
+        async function loadAlbum(sessionId) {
+            try {
+                const response = await fetch(CONFIG.WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'getClassAlbum',
+                        sessionId: sessionId
+                    })
+                });
+                
+                const result = await response.json();
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (result.success && result.album) {
+                    displayAlbum(result.album);
+                } else {
+                    showEmpty();
+                }
+            } catch (error) {
+                console.error('載入失敗:', error);
+                showError();
+            }
+        }
+        
+        // 顯示相簿
+        function displayAlbum(album) {
+            // 顯示會員資訊
+            document.getElementById('memberName').textContent = album.member_name || '';
+            document.getElementById('classDate').textContent = `📅 ${album.class_date || ''} ${album.class_time || ''}`;
+            document.getElementById('coachName').textContent = `👤 教練：${album.coach_name || ''}`;
+            
+            // 課種標籤
+            const typeInfo = classTypeNames[album.class_type] || { name: album.class_type, class: '' };
+            const classTypeBadge = document.getElementById('classType');
+            classTypeBadge.textContent = typeInfo.name;
+            classTypeBadge.className = 'class-type-badge ' + typeInfo.class;
+            
+            document.getElementById('memberInfo').style.display = 'block';
+            
+            // 解析照片 URL
+            if (album.photos && album.photos.trim() !== '') {
+                photos = album.photos.split(',').map(url => url.trim()).filter(url => url);
+            }
+            
+            if (photos.length === 0) {
+                showEmpty();
+                return;
+            }
+            
+            // 顯示照片數量
+            document.getElementById('photoCount').textContent = `(${photos.length} 張)`;
+            
+            // 渲染照片格子
+            const grid = document.getElementById('photoGrid');
+            grid.innerHTML = photos.map((url, index) => `
+                <div class="photo-item" onclick="openLightbox(${index})">
+                    <img src="${url}" alt="照片 ${index + 1}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                </div>
+            `).join('');
+            
+            document.getElementById('albumSection').style.display = 'block';
+        }
+        
+        // 顯示空白
+        function showEmpty() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('empty').style.display = 'block';
+        }
+        
+        // 顯示錯誤
+        function showError() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+        }
+        
+        // Lightbox 功能
+        function openLightbox(index) {
+            currentIndex = index;
+            updateLightbox();
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function updateLightbox() {
+            const imageUrl = photos[currentIndex];
+            document.getElementById('lightboxImage').src = imageUrl;
+            document.getElementById('lightboxCounter').textContent = `${currentIndex + 1} / ${photos.length}`;
+            
+            // 設定下載連結
+            const downloadBtn = document.getElementById('lightboxDownload');
+            downloadBtn.href = imageUrl;
+            downloadBtn.download = `photo_${currentIndex + 1}.jpg`;
+        }
+        
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            updateLightbox();
+        }
+        
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % photos.length;
+            updateLightbox();
+        }
+        
+        // 下載全部照片
+        async function downloadAllPhotos() {
+            const btn = document.getElementById('downloadAllBtn');
+            btn.disabled = true;
+            btn.textContent = '下載中...';
+            
+            for (let i = 0; i < photos.length; i++) {
+                try {
+                    const response = await fetch(photos[i]);
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `photo_${i + 1}.jpg`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    
+                    // 每張間隔 500ms 避免太快
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                } catch (error) {
+                    console.error('下載失敗:', error);
+                }
+            }
+            
+            btn.disabled = false;
+            btn.textContent = '⬇ 下載全部照片';
+        }
+        
+        // 鍵盤控制
+        document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            
+            switch (e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    prevImage();
+                    break;
+                case 'ArrowRight':
+                    nextImage();
+                    break;
+            }
+        });
+        
+        // 點擊背景關閉
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>
