@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>課表紀錄相簿 - 衡點健康</title>
+    <title>課表紀錄相簿</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📸</text></svg>">
     <style>
+        /* 品牌配色 */
         :root {
+            --white: #ffffff;
+            --gray: #808080;
             --green: #7ac19a;
-            --green-dark: #5a9a7a;
-            --green-light: #e8f5ee;
-            --pink: #f5b5b5;
-            --pink-dark: #d88888;
-            --pink-light: #fdf0f0;
-            --gray: #666;
-            --gray-light: #e0e0e0;
-            --gray-bg: #f8f9fa;
-            --white: #fff;
-            --shadow: 0 2px 12px rgba(0,0,0,0.1);
-            --radius: 12px;
+            --green-light: #e2ede6;
+            --green-dark: #5f846f;
+            --pink: #f2ac98;
+            --pink-light: #faece8;
+            --pink-dark: #c67566;
+            --yellow: #ffe08b;
+            --yellow-light: #fcf4e3;
+            --yellow-dark: #ba9e60;
+            --blue: #9fcccc;
+            --blue-light: #daedec;
+            --blue-dark: #66888e;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, var(--green-light) 0%, var(--pink-light) 100%);
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--green-light) 0%, var(--blue-light) 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 16px;
         }
         
         .container {
@@ -38,121 +38,75 @@
             margin: 0 auto;
         }
         
-        /* Header */
         .header {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
             text-align: center;
+            padding: 24px 20px;
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+            color: var(--white);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(95, 132, 111, 0.3);
         }
         
-        .header-logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--green-dark);
-            margin-bottom: 10px;
+        .header-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
         }
         
-        .header-title {
-            font-size: 18px;
-            color: var(--gray);
-        }
-        
-        .member-info {
-            margin-top: 15px;
-            padding: 12px;
-            background: var(--gray-bg);
-            border-radius: 8px;
-        }
-        
-        .member-info .name {
-            font-size: 20px;
+        .header h1 { 
+            font-size: 1.5rem; 
+            margin-bottom: 8px;
             font-weight: 600;
-            color: var(--green-dark);
         }
         
-        .member-info .date {
-            font-size: 14px;
-            color: var(--gray);
-            margin-top: 5px;
+        .header-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.95rem;
+            opacity: 0.95;
         }
         
-        .member-info .coach {
-            font-size: 14px;
-            color: var(--gray);
-            margin-top: 3px;
+        .header-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .photo-count {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-top: 12px;
+            font-size: 0.9rem;
         }
         
         .class-type-badge {
             display: inline-block;
-            padding: 4px 12px;
+            background: rgba(255,255,255,0.25);
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
             margin-top: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
         
-        .class-type-badge.strength_training {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .class-type-badge.pilates {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .class-type-badge.stretching {
-            background: #cce5ff;
-            color: #004085;
-        }
-        
-        /* Loading & Empty */
-        .loading, .empty, .error {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--gray);
-        }
-        
-        .loading .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--gray-light);
-            border-top-color: var(--green);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .empty span, .error span {
-            font-size: 48px;
-            display: block;
-            margin-bottom: 15px;
-        }
-        
-        .error {
-            color: var(--pink-dark);
-        }
-        
-        /* Album Section */
-        .album-section {
+        /* Section */
+        .section {
             background: var(--white);
-            border-radius: var(--radius);
+            border-radius: 16px;
             padding: 20px;
-            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(95, 132, 111, 0.1);
         }
         
         .section-title {
-            font-size: 16px;
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--green-dark);
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             padding-bottom: 10px;
             border-bottom: 2px solid var(--green);
             display: flex;
@@ -160,80 +114,242 @@
             gap: 8px;
         }
         
-        .photo-count {
-            font-size: 13px;
-            font-weight: normal;
-            color: var(--gray);
-        }
-        
-        /* Photo Grid */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        /* 選擇工具列 */
+        .select-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--green-light);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
             gap: 10px;
         }
         
-        .photo-item {
-            aspect-ratio: 1;
-            border-radius: 8px;
-            overflow: hidden;
+        .select-info {
+            color: var(--green-dark);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .select-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .select-btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.85rem;
             cursor: pointer;
-            border: 2px solid var(--gray-light);
-            transition: all 0.2s ease;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         
-        .photo-item:hover {
+        .select-btn.outline {
+            background: var(--white);
+            color: var(--green-dark);
+            border: 1px solid var(--green);
+        }
+        
+        .select-btn.outline:hover {
+            background: var(--green);
+            color: var(--white);
+        }
+        
+        .select-btn.primary {
+            background: var(--green);
+            color: var(--white);
+        }
+        
+        .select-btn.primary:hover {
+            background: var(--green-dark);
+        }
+        
+        .select-btn.primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        /* 圖片選擇樣式 */
+        .gallery-item .select-checkbox {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid var(--white);
+            background: rgba(0,0,0,0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 5;
+        }
+        
+        .gallery-item .select-checkbox:hover {
+            background: var(--green);
             border-color: var(--green);
-            transform: scale(1.02);
         }
         
-        .photo-item img {
+        .gallery-item .select-checkbox.selected {
+            background: var(--green);
+            border-color: var(--white);
+        }
+        
+        .gallery-item .select-checkbox.selected::after {
+            content: '✓';
+            color: var(--white);
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .gallery-item.selected {
+            outline: 3px solid var(--green);
+            outline-offset: 2px;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(95, 132, 111, 0.15);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: var(--white);
+        }
+        
+        .gallery-item:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 8px 20px rgba(95, 132, 111, 0.25);
+        }
+        
+        .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
         
-        /* Lightbox */
-        .lightbox {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            justify-content: center;
+        .gallery-item .index {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--green-dark);
+            color: var(--white);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
             align-items: center;
-            z-index: 1000;
-            flex-direction: column;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
         
-        .lightbox.active {
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(95, 132, 111, 0.97);
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .lightbox.active { display: flex; }
+        
+        .lightbox-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 20px;
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--white);
+        }
+        
+        .lightbox-counter {
+            font-size: 1rem;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.15);
+            padding: 6px 14px;
+            border-radius: 20px;
         }
         
         .lightbox-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
             border-radius: 50%;
-            color: white;
-            font-size: 24px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background 0.2s;
         }
         
-        .lightbox-image {
-            max-width: 90%;
-            max-height: 80%;
+        .lightbox-close:hover {
+            background: var(--pink);
+        }
+        
+        .lightbox-download {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: var(--white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        
+        .lightbox-download:hover {
+            background: var(--green);
+        }
+        
+        .lightbox-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 60px 16px 80px;
+            overflow: auto;
+        }
+        
+        .lightbox-content img { 
+            max-width: 95vw; 
+            max-height: calc(100vh - 160px);
+            width: auto;
+            height: auto;
             object-fit: contain;
             border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         
         .lightbox-nav {
@@ -242,285 +358,553 @@
             transform: translateY(-50%);
             width: 50px;
             height: 50px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
             border-radius: 50%;
-            color: white;
-            font-size: 24px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background 0.2s, transform 0.2s;
         }
         
-        .lightbox-nav.prev {
-            left: 20px;
+        .lightbox-nav:hover { 
+            background: var(--green);
+            transform: translateY(-50%) scale(1.1);
         }
+        .lightbox-nav.prev { left: 16px; }
+        .lightbox-nav.next { right: 16px; }
         
-        .lightbox-nav.next {
-            right: 20px;
-        }
-        
-        .lightbox-counter {
+        .lightbox-thumbnails {
             position: absolute;
-            bottom: 30px;
-            color: white;
-            font-size: 14px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            overflow-x: auto;
+            background: rgba(95, 132, 111, 0.8);
         }
         
-        .lightbox-download {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+        .lightbox-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s, transform 0.2s;
+            flex-shrink: 0;
+            border: 2px solid transparent;
+        }
+        
+        .lightbox-thumb.active {
+            opacity: 1;
+            transform: scale(1.1);
+            border-color: var(--yellow);
+            box-shadow: 0 0 10px rgba(255, 224, 139, 0.5);
+        }
+        
+        .lightbox-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* No images */
+        .no-images {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .no-images-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        
+        .no-images p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--green-dark);
+        }
+        
+        .loading-spinner {
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
+            border: 3px solid var(--green-light);
+            border-top-color: var(--green);
             border-radius: 50%;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
         }
         
-        .lightbox-download:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-        
-        /* 下載全部按鈕 */
-        .download-all-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 16px;
-            background: var(--green);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.2s ease;
-        }
-        
-        .download-all-btn:hover {
-            background: var(--green-dark);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         /* Footer */
         .footer {
             text-align: center;
-            margin-top: 20px;
-            padding: 15px;
-            color: var(--gray);
-            font-size: 13px;
+            padding: 20px;
+            color: var(--green-dark);
+            font-size: 0.85rem;
         }
         
         .footer a {
-            color: var(--green-dark);
+            color: var(--green);
             text-decoration: none;
         }
         
-        /* Responsive */
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* Mobile */
         @media (max-width: 480px) {
-            body {
-                padding: 15px;
-            }
-            
-            .photo-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
             }
             
             .lightbox-nav {
                 width: 40px;
                 height: 40px;
-                font-size: 20px;
+                font-size: 1.2rem;
             }
             
-            .lightbox-nav.prev {
-                left: 10px;
+            .lightbox-nav.prev { left: 8px; }
+            .lightbox-nav.next { right: 8px; }
+            
+            /* 選擇工具列響應式 */
+            .select-toolbar {
+                flex-direction: column;
+                text-align: center;
             }
             
-            .lightbox-nav.next {
-                right: 10px;
+            .select-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .select-btn {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .header-info {
+                flex-direction: column;
+                gap: 6px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
-            <div class="header-logo">📷 衡點健康</div>
-            <div class="header-title">課表紀錄相簿</div>
-            <div class="member-info" id="memberInfo" style="display: none;">
-                <div class="name" id="memberName"></div>
-                <div class="date" id="classDate"></div>
-                <div class="coach" id="coachName"></div>
-                <div class="class-type-badge" id="classType"></div>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#5f846f" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                </div>
+                <span style="font-size: 1.1rem; font-weight: 500;">衡點健康</span>
             </div>
+            <h1>課表紀錄相簿</h1>
+            <div class="header-info">
+                <span id="memberInfo">👤 載入中...</span>
+                <span id="dateInfo">📅 --</span>
+                <span id="coachInfo">🏋️ --</span>
+            </div>
+            <div class="class-type-badge" id="classTypeBadge" style="display:none;"></div>
+            <div class="photo-count" id="photoCount">📷 -- 張照片</div>
         </div>
         
-        <!-- Loading -->
         <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>載入中...</p>
+            <div class="loading-spinner"></div>
+            <p>載入照片中...</p>
         </div>
         
-        <!-- Error -->
-        <div class="error" id="error" style="display: none;">
-            <span>❌</span>
-            <p>無法載入相簿資料</p>
-        </div>
-        
-        <!-- Empty -->
-        <div class="empty" id="empty" style="display: none;">
-            <span>📭</span>
-            <p>此課表沒有照片</p>
-        </div>
-        
-        <!-- Album -->
-        <div class="album-section" id="albumSection" style="display: none;">
-            <div class="section-title">
-                📸 課表紀錄
-                <span class="photo-count" id="photoCount"></span>
+        <div id="content" style="display:none;">
+            <!-- 選擇工具列 -->
+            <div class="select-toolbar" id="selectToolbar">
+                <div class="select-info">
+                    <span id="selectedCount">已選 0 張</span>
+                </div>
+                <div class="select-actions">
+                    <button class="select-btn outline" onclick="selectAll()">☑️ 全選</button>
+                    <button class="select-btn outline" onclick="clearSelection()">✖️ 取消</button>
+                    <button class="select-btn primary" id="downloadBtn" onclick="downloadSelected()" disabled>
+                        📥 下載 JPG
+                    </button>
+                </div>
             </div>
-            <div class="photo-grid" id="photoGrid"></div>
-            <button class="download-all-btn" id="downloadAllBtn" onclick="downloadAllPhotos()">
-                ⬇ 下載全部照片
-            </button>
+            
+            <!-- 照片區 -->
+            <div class="section" id="photoSection">
+                <div class="section-title">📸 課表紀錄照片</div>
+                <div class="gallery" id="photoGallery"></div>
+                <div class="no-images" id="noPhotos" style="display:none;">
+                    <div class="no-images-icon">📷</div>
+                    <p>尚無課表紀錄照片</p>
+                </div>
+            </div>
         </div>
         
-        <!-- Footer -->
         <div class="footer">
-            <a href="javascript:history.back()">← 返回</a>
+            <p>衡點健康</p>
         </div>
     </div>
     
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
-        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-        <a class="lightbox-download" id="lightboxDownload" href="" download title="下載照片">⬇</a>
-        <button class="lightbox-nav prev" onclick="prevImage()">‹</button>
-        <img class="lightbox-image" id="lightboxImage" src="" alt="">
-        <button class="lightbox-nav next" onclick="nextImage()">›</button>
-        <div class="lightbox-counter" id="lightboxCounter"></div>
+        <div class="lightbox-header">
+            <span class="lightbox-counter" id="lightboxCounter">1 / 5</span>
+            <button class="lightbox-download" onclick="downloadCurrent()" title="下載此圖片">📥</button>
+            <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        </div>
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="">
+        </div>
+        <button class="lightbox-nav prev" onclick="navigateLightbox(-1)">‹</button>
+        <button class="lightbox-nav next" onclick="navigateLightbox(1)">›</button>
+        <div class="lightbox-thumbnails" id="lightboxThumbnails"></div>
     </div>
-    
+
     <script>
         // 設定
-        const CONFIG = {
-            // 【請填入】Make.com Webhook URL
-            WEBHOOK_URL: 'https://hook.us2.make.com/9ydnn20drmcegfl5cvm9e3tqqb37azir'
+        var CONFIG = {
+            MAKE_WEBHOOK_URL: 'https://hook.us2.make.com/9ydnn20drmcegfl5cvm9e3tqqb37azir'
+        };
+        
+        // 課種名稱
+        var classTypeNames = {
+            'strength_training': '💪 重訓',
+            'pilates': '🧘 皮拉提斯',
+            'stretching': '🤸 伸展'
         };
         
         // 全域變數
-        let photos = [];
-        let currentIndex = 0;
-        
-        // 課種名稱對應
-        const classTypeNames = {
-            'strength_training': { name: '💪 重訓', class: 'strength_training' },
-            'pilates': { name: '🧘 皮拉提斯', class: 'pilates' },
-            'stretching': { name: '🤸 伸展', class: 'stretching' }
-        };
+        var allImages = [];
+        var currentIndex = 0;
+        var memberName = '';
+        var albumDate = '';
         
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const sessionId = urlParams.get('id');
+            loadData();
+        });
+        
+        async function loadData() {
+            var params = new URLSearchParams(window.location.search);
+            var id = params.get('id');
             
-            if (!sessionId) {
-                showError();
+            if (!id) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                document.getElementById('noPhotos').style.display = 'block';
                 return;
             }
             
-            loadAlbum(sessionId);
-        });
-        
-        // 載入相簿資料
-        async function loadAlbum(sessionId) {
             try {
-                const response = await fetch(CONFIG.WEBHOOK_URL, {
+                var response = await fetch(CONFIG.MAKE_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'getClassAlbum',
-                        sessionId: sessionId
+                        sessionId: id
                     })
                 });
                 
-                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error('HTTP 錯誤: ' + response.status);
+                }
                 
-                document.getElementById('loading').style.display = 'none';
+                var text = await response.text();
+                var result;
+                
+                try {
+                    result = JSON.parse(text);
+                } catch (e) {
+                    console.error('JSON 解析失敗:', text);
+                    throw new Error('回應不是有效的 JSON');
+                }
                 
                 if (result.success && result.album) {
-                    displayAlbum(result.album);
+                    var album = result.album;
+                    
+                    memberName = album.member_name || '會員';
+                    albumDate = album.class_date || '';
+                    
+                    // 更新標題資訊
+                    document.getElementById('memberInfo').textContent = '👤 ' + memberName;
+                    document.getElementById('dateInfo').textContent = '📅 ' + (album.class_date || '') + ' ' + (album.class_time || '');
+                    document.getElementById('coachInfo').textContent = '🏋️ ' + (album.coach_name || '');
+                    
+                    // 課種標籤
+                    if (album.class_type && classTypeNames[album.class_type]) {
+                        var badge = document.getElementById('classTypeBadge');
+                        badge.textContent = classTypeNames[album.class_type];
+                        badge.style.display = 'inline-block';
+                    }
+                    
+                    // 解析照片 URL
+                    var photos = [];
+                    if (album.photos && typeof album.photos === 'string' && album.photos.trim()) {
+                        photos = album.photos.split(',').map(function(u) { 
+                            return u.trim(); 
+                        }).filter(function(u) { 
+                            return u && u.startsWith('http'); 
+                        });
+                    }
+                    
+                    document.getElementById('photoCount').textContent = '📷 ' + photos.length + ' 張照片';
+                    document.title = memberName + ' - 課表紀錄相簿';
+                    
+                    // 隱藏載入中，顯示內容
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                    
+                    // 渲染照片
+                    if (photos.length > 0) {
+                        renderGallery(photos);
+                        renderThumbnails();
+                    } else {
+                        document.getElementById('noPhotos').style.display = 'block';
+                    }
                 } else {
-                    showEmpty();
+                    throw new Error('查詢失敗');
                 }
             } catch (error) {
                 console.error('載入失敗:', error);
-                showError();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                document.getElementById('noPhotos').style.display = 'block';
             }
         }
         
-        // 顯示相簿
-        function displayAlbum(album) {
-            // 顯示會員資訊
-            document.getElementById('memberName').textContent = album.member_name || '';
-            document.getElementById('classDate').textContent = `📅 ${album.class_date || ''} ${album.class_time || ''}`;
-            document.getElementById('coachName').textContent = `👤 教練：${album.coach_name || ''}`;
+        function renderGallery(images) {
+            var gallery = document.getElementById('photoGallery');
+            gallery.innerHTML = '';
             
-            // 課種標籤
-            const typeInfo = classTypeNames[album.class_type] || { name: album.class_type, class: '' };
-            const classTypeBadge = document.getElementById('classType');
-            classTypeBadge.textContent = typeInfo.name;
-            classTypeBadge.className = 'class-type-badge ' + typeInfo.class;
+            images.forEach(function(url, index) {
+                allImages.push({ url: url, selected: false });
+                
+                var item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.setAttribute('data-index', index);
+                
+                // 選擇 checkbox
+                var checkbox = document.createElement('div');
+                checkbox.className = 'select-checkbox';
+                checkbox.setAttribute('data-index', index);
+                checkbox.onclick = function(e) {
+                    e.stopPropagation();
+                    toggleSelect(parseInt(this.getAttribute('data-index')));
+                };
+                
+                item.onclick = function() { 
+                    openLightbox(parseInt(this.getAttribute('data-index'))); 
+                };
+                item.innerHTML = 
+                    '<img src="' + url + '" alt="照片 ' + (index + 1) + '" loading="lazy">' +
+                    '<span class="index">' + (index + 1) + '</span>';
+                item.appendChild(checkbox);
+                gallery.appendChild(item);
+            });
+        }
+        
+        // ==================== 選擇功能 ====================
+        function toggleSelect(index) {
+            allImages[index].selected = !allImages[index].selected;
+            updateSelectionUI();
+        }
+        
+        function selectAll() {
+            allImages.forEach(function(img) {
+                img.selected = true;
+            });
+            updateSelectionUI();
+        }
+        
+        function clearSelection() {
+            allImages.forEach(function(img) {
+                img.selected = false;
+            });
+            updateSelectionUI();
+        }
+        
+        function updateSelectionUI() {
+            var selectedCount = 0;
             
-            document.getElementById('memberInfo').style.display = 'block';
+            allImages.forEach(function(img, index) {
+                var item = document.querySelector('.gallery-item[data-index="' + index + '"]');
+                var checkbox = item ? item.querySelector('.select-checkbox') : null;
+                
+                if (img.selected) {
+                    selectedCount++;
+                    if (item) item.classList.add('selected');
+                    if (checkbox) checkbox.classList.add('selected');
+                } else {
+                    if (item) item.classList.remove('selected');
+                    if (checkbox) checkbox.classList.remove('selected');
+                }
+            });
             
-            // 解析照片 URL
-            if (album.photos && album.photos.trim() !== '') {
-                photos = album.photos.split(',').map(url => url.trim()).filter(url => url);
+            document.getElementById('selectedCount').textContent = '已選 ' + selectedCount + ' 張';
+            document.getElementById('downloadBtn').disabled = selectedCount === 0;
+        }
+
+        // 檢測是否為 iOS
+        function isIOS() {
+            return /iPhone|iPad|iPod/i.test(navigator.userAgent) 
+                || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+        
+        async function downloadSelected() {
+            var selectedImages = allImages.filter(function(img) {
+                return img.selected;
+            });
+            
+            if (selectedImages.length === 0) {
+                alert('請先選擇要下載的圖片');
+                return;
             }
-            
-            if (photos.length === 0) {
-                showEmpty();
+
+            // iOS 裝置：顯示批次保存提示
+            if (isIOS()) {
+                showMobileBatchSaveDialog(selectedImages);
                 return;
             }
             
-            // 顯示照片數量
-            document.getElementById('photoCount').textContent = `(${photos.length} 張)`;
+            var downloadBtn = document.getElementById('downloadBtn');
+            var originalText = downloadBtn.innerHTML;
+            downloadBtn.disabled = true;
             
-            // 渲染照片格子
-            const grid = document.getElementById('photoGrid');
-            grid.innerHTML = photos.map((url, index) => `
-                <div class="photo-item" onclick="openLightbox(${index})">
-                    <img src="${url}" alt="照片 ${index + 1}" loading="lazy" onerror="this.parentElement.style.display='none'">
-                </div>
-            `).join('');
+            // 產生檔名前綴
+            var prefix = (memberName || '會員').replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+            var dateStr = (albumDate || '').replace(/[\/\s:]/g, '-').replace(/-+/g, '-');
+            if (dateStr) prefix += '_' + dateStr;
             
-            document.getElementById('albumSection').style.display = 'block';
+            for (var i = 0; i < selectedImages.length; i++) {
+                var img = selectedImages[i];
+                downloadBtn.innerHTML = '📥 下載中 ' + (i + 1) + '/' + selectedImages.length;
+                
+                try {
+                    var jpgUrl = img.url;
+                    if (jpgUrl.includes('ik.imagekit.io')) {
+                        jpgUrl += (jpgUrl.includes('?') ? '&' : '?') + 'tr=f-jpg';
+                    }
+                    
+                    var filename = prefix + '_' + (i + 1) + '.jpg';
+                    
+                    var response = await fetch(jpgUrl);
+                    var blob = await response.blob();
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    
+                    if (i < selectedImages.length - 1) {
+                        await new Promise(function(resolve) { setTimeout(resolve, 500); });
+                    }
+                } catch (err) {
+                    console.error('下載失敗:', err);
+                }
+            }
+            
+            downloadBtn.innerHTML = originalText;
+            downloadBtn.disabled = false;
+        }
+
+        // 手機批次保存對話框
+        function showMobileBatchSaveDialog(images) {
+            var prefix = (memberName || '會員').replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+            var dateStr = (albumDate || '').replace(/[\/\s:]/g, '-').replace(/-+/g, '-');
+            if (dateStr) prefix += '_' + dateStr;
+            
+            var imagesHtml = images.map(function(img, index) {
+                var jpgUrl = img.url;
+                if (jpgUrl.includes('ik.imagekit.io')) {
+                    jpgUrl += (jpgUrl.includes('?') ? '&' : '?') + 'tr=f-jpg';
+                }
+                var filename = prefix + '_' + (index + 1) + '.jpg';
+                
+                return '<div style="margin-bottom:20px;text-align:center;">' +
+                    '<img src="' + jpgUrl + '" style="max-width:100%;max-height:200px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.3);" />' +
+                    '<p style="font-size:0.8rem;opacity:0.7;margin-top:8px;">' + (index + 1) + '. ' + filename + '</p>' +
+                    '</div>';
+            }).join('');
+            
+            var overlay = document.createElement('div');
+            overlay.id = 'mobileBatchOverlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:10001;overflow-y:auto;padding:20px;';
+            
+            overlay.innerHTML = '<div style="text-align:center;color:#fff;max-width:500px;margin:0 auto;">' +
+                '<div style="font-size:2.5rem;margin-bottom:15px;">📱</div>' +
+                '<h3 style="font-size:1.2rem;margin-bottom:10px;">保存 ' + images.length + ' 張圖片</h3>' +
+                '<p style="font-size:0.95rem;margin-bottom:20px;opacity:0.9;line-height:1.5;">' +
+                '請<strong>長按每張圖片</strong>，選擇「<strong>加入照片</strong>」保存</p>' +
+                '<div style="text-align:left;margin-bottom:20px;">' + imagesHtml + '</div>' +
+                '<button onclick="document.getElementById(\'mobileBatchOverlay\').remove()" ' +
+                'style="background:#7ac19a;color:#fff;border:none;padding:14px 40px;border-radius:25px;font-size:1rem;cursor:pointer;position:sticky;bottom:20px;">' +
+                '✓ 完成保存</button></div>';
+            
+            document.body.appendChild(overlay);
         }
         
-        // 顯示空白
-        function showEmpty() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('empty').style.display = 'block';
+        function renderThumbnails() {
+            var container = document.getElementById('lightboxThumbnails');
+            container.innerHTML = '';
+            
+            allImages.forEach(function(img, index) {
+                var thumb = document.createElement('div');
+                thumb.className = 'lightbox-thumb' + (index === 0 ? ' active' : '');
+                thumb.onclick = function(e) { 
+                    e.stopPropagation();
+                    goToImage(index); 
+                };
+                thumb.innerHTML = '<img src="' + img.url + '" alt="">';
+                container.appendChild(thumb);
+            });
         }
         
-        // 顯示錯誤
-        function showError() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error').style.display = 'block';
-        }
-        
-        // Lightbox 功能
         function openLightbox(index) {
             currentIndex = index;
             updateLightbox();
@@ -533,80 +917,116 @@
             document.body.style.overflow = '';
         }
         
-        function updateLightbox() {
-            const imageUrl = photos[currentIndex];
-            document.getElementById('lightboxImage').src = imageUrl;
-            document.getElementById('lightboxCounter').textContent = `${currentIndex + 1} / ${photos.length}`;
+        // 下載當前圖片
+        async function downloadCurrent() {
+            var img = allImages[currentIndex];
+            if (!img) return;
             
-            // 設定下載連結
-            const downloadBtn = document.getElementById('lightboxDownload');
-            downloadBtn.href = imageUrl;
-            downloadBtn.download = `photo_${currentIndex + 1}.jpg`;
-        }
-        
-        function prevImage() {
-            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-            updateLightbox();
-        }
-        
-        function nextImage() {
-            currentIndex = (currentIndex + 1) % photos.length;
-            updateLightbox();
-        }
-        
-        // 下載全部照片
-        async function downloadAllPhotos() {
-            const btn = document.getElementById('downloadAllBtn');
-            btn.disabled = true;
-            btn.textContent = '下載中...';
-            
-            for (let i = 0; i < photos.length; i++) {
-                try {
-                    const response = await fetch(photos[i]);
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `photo_${i + 1}.jpg`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                    
-                    // 每張間隔 500ms 避免太快
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                } catch (error) {
-                    console.error('下載失敗:', error);
+            try {
+                var jpgUrl = img.url;
+                if (jpgUrl.includes('ik.imagekit.io')) {
+                    jpgUrl += (jpgUrl.includes('?') ? '&' : '?') + 'tr=f-jpg';
+                }
+                
+                var prefix = (memberName || '會員').replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+                var dateStr = (albumDate || '').replace(/[\/\s:]/g, '-').replace(/-+/g, '-');
+                if (dateStr) prefix += '_' + dateStr;
+                var filename = prefix + '_' + (currentIndex + 1) + '.jpg';
+                
+                if (isIOS()) {
+                    showMobileSaveDialog(jpgUrl, filename);
+                    return;
+                }
+                
+                var response = await fetch(jpgUrl);
+                var blob = await response.blob();
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (err) {
+                console.error('下載失敗:', err);
+                if (confirm('自動下載失敗，要開啟圖片讓您手動保存嗎？')) {
+                    window.open(jpgUrl, '_blank');
                 }
             }
-            
-            btn.disabled = false;
-            btn.textContent = '⬇ 下載全部照片';
         }
         
-        // 鍵盤控制
+        // 手機保存提示對話框
+        function showMobileSaveDialog(imageUrl, filename) {
+            var overlay = document.createElement('div');
+            overlay.id = 'mobileSaveOverlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:10001;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+            
+            overlay.innerHTML = '<div style="text-align:center;color:#fff;max-width:400px;">' +
+                '<div style="font-size:3rem;margin-bottom:20px;">📱</div>' +
+                '<h3 style="font-size:1.3rem;margin-bottom:15px;">保存圖片到相簿</h3>' +
+                '<p style="font-size:1rem;margin-bottom:20px;opacity:0.9;line-height:1.6;">' +
+                '請<strong>長按下方圖片</strong>，<br>然後選擇「<strong>加入照片</strong>」或「<strong>儲存圖片</strong>」</p>' +
+                '<img src="' + imageUrl + '" style="max-width:100%;max-height:50vh;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.5);margin-bottom:20px;" />' +
+                '<p style="font-size:0.85rem;opacity:0.7;margin-bottom:20px;">' + filename + '</p>' +
+                '<button onclick="document.getElementById(\'mobileSaveOverlay\').remove()" ' +
+                'style="background:#7ac19a;color:#fff;border:none;padding:14px 40px;border-radius:25px;font-size:1rem;cursor:pointer;">✓ 完成</button></div>';
+            
+            document.body.appendChild(overlay);
+        }
+        
+        function navigateLightbox(direction) {
+            event.stopPropagation();
+            currentIndex = (currentIndex + direction + allImages.length) % allImages.length;
+            updateLightbox();
+        }
+        
+        function goToImage(index) {
+            currentIndex = index;
+            updateLightbox();
+        }
+        
+        function updateLightbox() {
+            document.getElementById('lightboxImg').src = allImages[currentIndex].url;
+            document.getElementById('lightboxCounter').textContent = (currentIndex + 1) + ' / ' + allImages.length;
+            
+            document.querySelectorAll('.lightbox-thumb').forEach(function(thumb, i) {
+                thumb.classList.toggle('active', i === currentIndex);
+            });
+        }
+        
+        // 鍵盤操作
         document.addEventListener('keydown', function(e) {
             if (!document.getElementById('lightbox').classList.contains('active')) return;
             
-            switch (e.key) {
-                case 'Escape':
-                    closeLightbox();
-                    break;
-                case 'ArrowLeft':
-                    prevImage();
-                    break;
-                case 'ArrowRight':
-                    nextImage();
-                    break;
-            }
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') navigateLightbox(-1);
+            if (e.key === 'ArrowRight') navigateLightbox(1);
         });
         
-        // 點擊背景關閉
-        document.getElementById('lightbox').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeLightbox();
+        // 觸控滑動
+        var touchStartX = 0;
+        var touchEndX = 0;
+        
+        document.getElementById('lightbox').addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+        
+        document.getElementById('lightbox').addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+        
+        function handleSwipe() {
+            var diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    navigateLightbox(1);
+                } else {
+                    navigateLightbox(-1);
+                }
             }
-        });
+        }
     </script>
 </body>
 </html>
