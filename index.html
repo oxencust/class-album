@@ -606,8 +606,18 @@
     <script>
         // 設定
         var CONFIG = {
-            MAKE_WEBHOOK_URL: 'https://hook.us2.make.com/9ydnn20drmcegfl5cvm9e3tqqb37azir'
+            EDGE_FUNCTION_URL: 'https://mnjilhpztnowaplggvkk.supabase.co/functions/v1/class-record-api'
         };
+        async function callEdge(action, params) {
+            params = params || {};
+            var res = await fetch(CONFIG.EDGE_FUNCTION_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.assign({ action: action }, params))
+            });
+            if (!res.ok) throw new Error('Edge Function error: ' + res.status);
+            return res.json();
+        }
         
         // 課種名稱
         var classTypeNames = {
@@ -639,14 +649,7 @@
             }
             
             try {
-                var response = await fetch(CONFIG.MAKE_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'getClassAlbum',
-                        sessionId: id
-                    })
-                });
+                var response = await callEdge('getClassPhotos', { sessionId: id });
                 
                 if (!response.ok) {
                     throw new Error('HTTP 錯誤: ' + response.status);
